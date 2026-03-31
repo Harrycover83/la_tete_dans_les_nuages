@@ -4,43 +4,25 @@
     "slug": "tete-dans-les-nuages",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#6366f1"
-    },
+    "userInterfaceStyle": "dark",
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "fr.tete-dans-les-nuages.app"
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#6366f1"
-      },
       "package": "fr.tete_dans_les_nuages.app"
     },
     "web": {
       "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/favicon.png"
+      "output": "single"
     },
     "plugins": [
       "expo-router",
-      "expo-secure-store",
-      [
-        "expo-notifications",
-        {
-          "icon": "./assets/notification-icon.png",
-          "color": "#6366f1"
-        }
-      ]
+      "expo-secure-store"
     ],
     "experiments": {
-      "typedRoutes": true
+      "typedRoutes": false
     },
     "scheme": "tdln"
   }

@@ -1,13 +1,14 @@
 import { Response } from 'express';
 import { AuthRequest } from '../middlewares/auth.middleware';
 import * as cardService from '../services/card.service';
+import { ERROR_CODES } from '../constants/error-codes';
 
 export async function getMyCard(req: AuthRequest, res: Response) {
   try {
     const card = await cardService.getCard(req.userId!);
     res.json(card);
   } catch (err: unknown) {
-    if (err instanceof Error && err.message === 'CARD_NOT_FOUND') {
+    if (err instanceof Error && err.message === ERROR_CODES.CARD_NOT_FOUND) {
       return res.status(404).json({ message: 'Carte non trouvée.' });
     }
     res.status(500).json({ message: 'Erreur serveur' });
@@ -21,9 +22,9 @@ export async function debit(req: AuthRequest, res: Response) {
     res.json({ balance: card.balance });
   } catch (err: unknown) {
     if (err instanceof Error) {
-      if (err.message === 'CARD_NOT_FOUND') return res.status(404).json({ message: 'Carte non trouvée.' });
-      if (err.message === 'INSUFFICIENT_BALANCE') return res.status(400).json({ message: 'Solde insuffisant.' });
-      if (err.message === 'INVALID_AMOUNT') return res.status(400).json({ message: 'Montant invalide.' });
+      if (err.message === ERROR_CODES.CARD_NOT_FOUND) return res.status(404).json({ message: 'Carte non trouvée.' });
+      if (err.message === ERROR_CODES.INSUFFICIENT_BALANCE) return res.status(400).json({ message: 'Solde insuffisant.' });
+      if (err.message === ERROR_CODES.INVALID_AMOUNT) return res.status(400).json({ message: 'Montant invalide.' });
     }
     res.status(500).json({ message: 'Erreur serveur' });
   }

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { ArticleCategory } from '@prisma/client';
 import * as gazetteService from '../services/gazette.service';
+import { ERROR_CODES } from '../constants/error-codes';
 
 export async function getArticles(req: Request, res: Response) {
   try {
@@ -20,7 +21,7 @@ export async function getArticleById(req: Request, res: Response) {
     const article = await gazetteService.getArticleById(req.params.id);
     res.json(article);
   } catch (err: unknown) {
-    if (err instanceof Error && err.message === 'ARTICLE_NOT_FOUND') {
+    if (err instanceof Error && err.message === ERROR_CODES.ARTICLE_NOT_FOUND) {
       return res.status(404).json({ message: 'Article non trouvé.' });
     }
     res.status(500).json({ message: 'Erreur serveur' });

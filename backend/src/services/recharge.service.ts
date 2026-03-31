@@ -2,6 +2,7 @@ import Stripe from 'stripe';
 import { prisma } from '../utils/prisma';
 import { creditCard } from './card.service';
 import { config } from '../utils/config';
+import { ERROR_CODES } from '../constants/error-codes';
 
 const stripe = new Stripe(config.STRIPE_SECRET_KEY ?? '', { apiVersion: '2023-10-16' });
 
@@ -14,7 +15,7 @@ export async function getPacks() {
 
 export async function createPaymentIntent(userId: string, packId: string) {
   const pack = await prisma.rechargePack.findUnique({ where: { id: packId } });
-  if (!pack) throw new Error('PACK_NOT_FOUND');
+  if (!pack) throw new Error(ERROR_CODES.PACK_NOT_FOUND);
 
   const amount = Math.round(pack.priceEur * 100); // cents
   const paymentIntent = await stripe.paymentIntents.create({

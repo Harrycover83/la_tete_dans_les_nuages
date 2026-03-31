@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { AuthRequest } from '../middlewares/auth.middleware';
 import * as rechargeService from '../services/recharge.service';
+import { ERROR_CODES } from '../constants/error-codes';
 
 export async function getPacks(_req: Request, res: Response) {
   try {
@@ -17,7 +18,7 @@ export async function createPaymentIntent(req: AuthRequest, res: Response) {
     const result = await rechargeService.createPaymentIntent(req.userId!, packId);
     res.json(result);
   } catch (err: unknown) {
-    if (err instanceof Error && err.message === 'PACK_NOT_FOUND') {
+    if (err instanceof Error && err.message === ERROR_CODES.PACK_NOT_FOUND) {
       return res.status(404).json({ message: 'Pack de recharge non trouvé.' });
     }
     res.status(500).json({ message: 'Erreur serveur' });

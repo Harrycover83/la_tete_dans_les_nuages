@@ -2,21 +2,44 @@
 module.exports = {
   content: ['./app/**/*.{js,jsx,ts,tsx}', './components/**/*.{js,jsx,ts,tsx}'],
   presets: [require('nativewind/preset')],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        primary: {
-          50: '#eef2ff',
-          100: '#e0e7ff',
-          200: '#c7d2fe',
-          300: '#a5b4fc',
-          400: '#818cf8',
-          500: '#6366f1',
-          600: '#4f46e5',
-          700: '#4338ca',
-          800: '#3730a3',
-          900: '#312e81',
-        },
+        // === La Tête Dans Les Nuages — charte graphique officielle ===
+        // Univers neon/arcade sur fond violet nuit
+
+        // Fonds
+        'bg-primary': '#1B1C72',
+        'bg-secondary': '#0B022E',
+        'bg-card': '#12063E',
+
+        // Accents neon
+        'neon-cyan': '#00D3FF',
+        'neon-cyan-light': '#48F4FF',
+        'neon-pink': '#FE53BB',
+        'neon-yellow': '#FFC700',
+        'neon-yellow-bright': '#FFE81C',
+        'neon-orange': '#FF6B35',
+
+        // Aliases marque (pour usage rapide)
+        brand: '#00D3FF',
+        'brand-secondary': '#FE53BB',
+        'brand-accent': '#FFC700',
+
+        // Statuts
+        'status-success': '#2FBE2C',
+        'status-error': '#E73434',
+        'status-warning': '#FFC700',
+        'status-info': '#2F97ED',
+      },
+      fontFamily: {
+        display: ['Exo2_700Bold'],
+        body: ['Inter_400Regular'],
+        'body-medium': ['Inter_500Medium'],
+        'body-semibold': ['Inter_600SemiBold'],
+        'body-bold': ['Inter_700Bold'],
+        mono: ['SpaceMono_400Regular'],
       },
     },
   },

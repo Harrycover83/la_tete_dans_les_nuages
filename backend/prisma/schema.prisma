@@ -1,4 +1,4 @@
-# Prisma schema for "Tête dans les Nuages"
+// Prisma schema for La Tete dans les Nuages
 generator client {
   provider = "prisma-client-js"
 }

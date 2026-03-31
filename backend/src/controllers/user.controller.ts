@@ -1,60 +1,53 @@
 import { Response } from 'express';
 import { AuthRequest } from '../middlewares/auth.middleware';
-import { prisma } from '../utils/prisma';
+import * as userService from '../services/user.service';
+import * as leaderboardService from '../services/leaderboard.service';
 
 export async function getMe(req: AuthRequest, res: Response) {
   try {
-    const user = await prisma.user.findUnique({
-      where: { id: req.userId },
-      select: {
-        id: true,
-        email: true,
-        firstName: true,
-        lastName: true,
-        dateOfBirth: true,
-        avatarUrl: true,
-        emailVerified: true,
-        role: true,
-        createdAt: true,
-      },
-    });
-    if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé.' });
-    res.json(user);
-  } catch {
-    res.status(500).json({ message: 'Erreur serveur' });
+    const profile = await userService.getProfile(req.userId!);
+    res.json(profile);
+  } catch (error: any) {
+    if (error.message === 'USER_NOT_FOUND') {
+      return res.status(404).json({ message: error.message });
+    }
+    res.status(500).json({ message: 'INTERNAL_SERVER_ERROR' });
   }
 }
 
 export async function updateMe(req: AuthRequest, res: Response) {
   try {
-    const { firstName, lastName, dateOfBirth } = req.body;
-    const user = await prisma.user.update({
-      where: { id: req.userId },
-      data: { firstName, lastName, dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : undefined },
-      select: {
-        id: true,
-        email: true,
-        firstName: true,
-        lastName: true,
-        dateOfBirth: true,
-        avatarUrl: true,
-        emailVerified: true,
-      },
+    const { firstName, lastName, dateOfBirth, avatarUrl } = req.body;
+    const updated = await userService.updateProfile(req.userId!, {
+      firstName,
+      lastName,
+      dateOfBirth,
+      avatarUrl,
     });
-    res.json(user);
-  } catch {
-    res.status(500).json({ message: 'Erreur serveur' });
+    res.json(updated);
+  } catch (error: any) {
+    res.status(500).json({ message: 'INTERNAL_SERVER_ERROR' });
   }
 }
 
 export async function getUserStats(req: AuthRequest, res: Response) {
   try {
     const { id } = req.params;
-    const stats = await import('../services/leaderboard.service').then((s) =>
-      s.getUserStats(id)
-    );
+    const stats = await leaderboardService.getUserStats(id);
     res.json(stats);
-  } catch {
-    res.status(500).json({ message: 'Erreur serveur' });
+  } catch (error: any) {
+    res.status(500).json({ message: 'INTERNAL_SERVER_ERROR' });
   }
 }
+
+export async function getMyTransactions(req: AuthRequest, res: Response) {
+  try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 20;
+    const result = await userService.getTransactionHistory(req.userId!, page, limit);
+    res.json(result);
+  } catch (error: any) {
+    res.status(500).json({ message: 'INTERNAL_SERVER_ERROR' });
+  }
+}
+

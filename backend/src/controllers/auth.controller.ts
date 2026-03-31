@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { z } from 'zod';
 import * as authService from '../services/auth.service';
+import { ERROR_CODES } from '../constants/error-codes';
 
 const registerSchema = z.object({
   email: z.string().email(),
@@ -22,7 +23,7 @@ export async function register(req: Request, res: Response) {
     );
     res.status(201).json({ message: 'Compte créé. Vérifiez votre email.', user });
   } catch (err: unknown) {
-    if (err instanceof Error && err.message === 'EMAIL_TAKEN') {
+    if (err instanceof Error && err.message === ERROR_CODES.EMAIL_TAKEN) {
       return res.status(409).json({ message: 'Cet email est déjà utilisé.' });
     }
     console.error(err);
@@ -46,7 +47,7 @@ export async function login(req: Request, res: Response) {
     const result = await authService.login(email, password);
     res.json(result);
   } catch (err: unknown) {
-    if (err instanceof Error && err.message === 'INVALID_CREDENTIALS') {
+    if (err instanceof Error && err.message === ERROR_CODES.INVALID_CREDENTIALS) {
       return res.status(401).json({ message: 'Email ou mot de passe incorrect.' });
     }
     res.status(500).json({ message: 'Erreur serveur' });

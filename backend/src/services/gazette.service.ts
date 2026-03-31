@@ -1,5 +1,6 @@
 import { prisma } from '../utils/prisma';
 import { ArticleCategory } from '@prisma/client';
+import { ERROR_CODES } from '../constants/error-codes';
 
 export async function getArticles(
   page = 1,
@@ -41,7 +42,7 @@ export async function getArticleById(id: string) {
     },
     include: { venues: { include: { venue: true } } },
   });
-  if (!article) throw new Error('ARTICLE_NOT_FOUND');
+  if (!article) throw new Error(ERROR_CODES.ARTICLE_NOT_FOUND);
   return article;
 }
 

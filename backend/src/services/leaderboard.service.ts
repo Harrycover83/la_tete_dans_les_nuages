@@ -1,4 +1,5 @@
 import { prisma } from '../utils/prisma';
+import { BUSINESS_CONSTANTS } from '../constants/business';
 
 export async function getLeaderboard(gameId: string, venueId?: string, page = 1, limit = 20) {
   const skip = (page - 1) * limit;
@@ -48,8 +49,7 @@ export async function recordGameSession(
   score: number,
   duration: number
 ) {
-  const XP_PER_SESSION = 10;
-  const xpEarned = XP_PER_SESSION + Math.floor(score / 100);
+  const xpEarned = BUSINESS_CONSTANTS.XP_PER_SESSION + Math.floor(score / BUSINESS_CONSTANTS.XP_SCORE_DIVISOR);
 
   const session = await prisma.gameSession.create({
     data: { userId, gameId, score, duration, xpEarned },

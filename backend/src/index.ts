@@ -6,6 +6,7 @@ import morgan from 'morgan';
 import { config } from './utils/config';
 import { prisma } from './utils/prisma';
 import { redis } from './utils/redis';
+import { authLimiter, apiLimiter, adminLimiter } from './middlewares/rate-limiter.middleware';
 
 import authRoutes from './routes/auth.routes';
 import cardRoutes from './routes/card.routes';
@@ -19,7 +20,22 @@ const app = express();
 
 // ─── Global Middleware ────────────────────────────────────────────────────────
 app.use(helmet());
-app.use(cors({ origin: config.FRONTEND_URL, credentials: true }));
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    // In development: allow any localhost/127.0.0.1 origin regardless of port
+    if (config.NODE_ENV === 'development' && /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
+      return callback(null, true);
+    }
+    // In production: allow only the configured FRONTEND_URL
+    if (origin === config.FRONTEND_URL) {
+      return callback(null, true);
+    }
+    callback(new Error(`CORS: origin ${origin} not allowed`));
+  },
+  credentials: true,
+}));
 app.use(compression());
 app.use(morgan('dev'));
 
@@ -37,13 +53,13 @@ app.get('/health', (_req, res) => {
 });
 
 // ─── Routes ───────────────────────────────────────────────────────────────────
-app.use('/api/auth', authRoutes);
-app.use('/api/card', cardRoutes);
-app.use('/api/recharge', rechargeRoutes);
-app.use('/api/gazette', gazetteRoutes);
-app.use('/api/leaderboard', leaderboardRoutes);
-app.use('/api/user', userRoutes);
-app.use('/api/admin', adminRoutes);
+app.use('/api/auth', authLimiter, authRoutes);
+app.use('/api/card', apiLimiter, cardRoutes);
+app.use('/api/recharge', apiLimiter, rechargeRoutes);
+app.use('/api/gazette', apiLimiter, gazetteRoutes);
+app.use('/api/leaderboard', apiLimiter, leaderboardRoutes);
+app.use('/api/user', apiLimiter, userRoutes);
+app.use('/api/admin', adminLimiter, adminRoutes);
 
 // ─── 404 Handler ─────────────────────────────────────────────────────────────
 app.use((_req, res) => {

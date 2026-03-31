@@ -22,84 +22,95 @@ export default function ProfileScreen() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50">
+    <SafeAreaView className="flex-1 bg-bg-primary">
       <ScrollView contentContainerClassName="px-4 pb-8">
         <View className="pt-4 pb-2">
-          <Text className="text-2xl font-bold text-gray-900">Profil 👤</Text>
+          <Text className="text-2xl font-bold text-neon-cyan">Profil 👤</Text>
         </View>
 
         {/* Avatar & Info */}
-        <View className="bg-white rounded-3xl p-6 mt-4 items-center shadow-sm border border-gray-100">
-          <View className="w-20 h-20 rounded-full bg-primary-100 items-center justify-center mb-3">
+        <View className="bg-bg-secondary rounded-3xl p-6 mt-4 items-center shadow-sm border-2 border-neon-cyan/20">
+          <View className="w-20 h-20 rounded-full bg-neon-cyan/20 items-center justify-center mb-3 border-2 border-neon-cyan">
             <Text className="text-4xl">
               {user?.firstName?.[0]?.toUpperCase() ?? '?'}
             </Text>
           </View>
-          <Text className="text-xl font-bold text-gray-900">
+          <Text className="text-xl font-bold text-text-primary">
             {user?.firstName} {user?.lastName}
           </Text>
-          <Text className="text-gray-500 text-sm">{user?.email}</Text>
+          <Text className="text-text-secondary text-sm">{user?.email}</Text>
           {!user?.emailVerified && (
-            <View className="mt-2 bg-amber-100 px-3 py-1 rounded-full">
-              <Text className="text-amber-700 text-xs">Email non vérifié</Text>
+            <View className="mt-2 bg-neon-yellow/20 px-3 py-1 rounded-full border border-neon-yellow/50">
+              <Text className="text-neon-yellow text-xs">Email non vérifié</Text>
             </View>
           )}
         </View>
 
         {/* Stats placeholder */}
-        <View className="bg-white rounded-3xl p-6 mt-4 shadow-sm border border-gray-100">
-          <Text className="font-bold text-gray-900 text-lg mb-4">🏆 Statistiques & Rangs</Text>
-          <View className="bg-gray-50 rounded-2xl p-4 items-center">
-            <Text className="text-gray-400 text-sm text-center">
+        <View className="bg-bg-secondary rounded-3xl p-6 mt-4 shadow-sm border-2 border-neon-pink/20">
+          <Text className="font-bold text-neon-pink text-lg mb-4">🏆 Statistiques & Rangs</Text>
+          <View className="bg-bg-primary rounded-2xl p-4 items-center">
+            <Text className="text-text-secondary text-sm text-center">
               Vos statistiques de jeu apparaîtront ici après vos premières parties.
             </Text>
           </View>
           <View className="flex-row mt-4 gap-3">
-            <View className="flex-1 bg-primary-50 rounded-2xl p-3 items-center">
-              <Text className="text-2xl font-bold text-primary-600">
+            <View className="flex-1 bg-neon-cyan/10 border border-neon-cyan/30 rounded-2xl p-3 items-center">
+              <Text className="text-2xl font-bold text-neon-cyan">
                 {stats?.totalXp ?? 0}
               </Text>
-              <Text className="text-primary-400 text-xs">XP Total</Text>
+              <Text className="text-neon-cyan/70 text-xs">XP Total</Text>
             </View>
-            <View className="flex-1 bg-green-50 rounded-2xl p-3 items-center">
-              <Text className="text-2xl font-bold text-green-600">
+            <View className="flex-1 bg-neon-pink/10 border border-neon-pink/30 rounded-2xl p-3 items-center">
+              <Text className="text-2xl font-bold text-neon-pink">
                 {stats?.gameSessions?.length ?? 0}
               </Text>
-              <Text className="text-green-400 text-xs">Parties</Text>
+              <Text className="text-neon-pink/70 text-xs">Parties</Text>
             </View>
-            <View className="flex-1 bg-amber-50 rounded-2xl p-3 items-center">
-              <Text className="text-2xl font-bold text-amber-600">
+            <View className="flex-1 bg-neon-yellow/10 border border-neon-yellow/30 rounded-2xl p-3 items-center">
+              <Text className="text-2xl font-bold text-neon-yellow">
                 {stats?.userBadges?.length ?? 0}
               </Text>
-              <Text className="text-amber-400 text-xs">Badges</Text>
+              <Text className="text-neon-yellow/70 text-xs">Badges</Text>
             </View>
           </View>
         </View>
 
         {/* Badges placeholder */}
-        <View className="bg-white rounded-3xl p-6 mt-4 shadow-sm border border-gray-100">
-          <Text className="font-bold text-gray-900 text-lg mb-3">🎖 Badges</Text>
-          <View className="bg-gray-50 rounded-2xl p-4 items-center">
-            <Text className="text-gray-400 text-sm text-center">
-              Gagnez des badges en jouant et en progressant dans le réseau.
-            </Text>
-          </View>
+        <View className="bg-bg-secondary rounded-3xl p-6 mt-4 shadow-sm border-2 border-neon-cyan/20">
+          <Text className="font-bold text-neon-pink text-lg mb-3">🎖 Badges</Text>
+          {stats?.userBadges && stats.userBadges.length > 0 ? (
+            <View className="flex-row flex-wrap gap-2">
+              {stats.userBadges.map((ub: any) => (
+                <View key={ub.id} className="bg-neon-yellow/10 border border-neon-yellow/30 rounded-xl p-3 items-center w-20">
+                  <Text className="text-3xl mb-1">{ub.badge.icon}</Text>
+                  <Text className="text-neon-yellow text-xs text-center">{ub.badge.name}</Text>
+                </View>
+              ))}
+            </View>
+          ) : (
+            <View className="bg-bg-primary rounded-2xl p-4 items-center">
+              <Text className="text-text-secondary text-sm text-center">
+                Gagnez des badges en jouant et en progressant dans le réseau.
+              </Text>
+            </View>
+          )}
         </View>
 
         {/* Actions */}
         <View className="mt-6 gap-3">
-          <TouchableOpacity className="bg-white rounded-2xl p-4 flex-row items-center border border-gray-100 shadow-sm">
+          <TouchableOpacity className="bg-bg-secondary rounded-2xl p-4 flex-row items-center border-2 border-neon-cyan/20 shadow-sm">
             <Text className="text-base mr-3">✏️</Text>
-            <Text className="text-gray-700 font-medium">Modifier mon profil</Text>
-            <Text className="ml-auto text-gray-400">›</Text>
+            <Text className="text-text-primary font-medium">Modifier mon profil</Text>
+            <Text className="ml-auto text-neon-cyan">›</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            className="bg-red-50 rounded-2xl p-4 flex-row items-center border border-red-100"
+            className="bg-neon-pink/10 rounded-2xl p-4 flex-row items-center border-2 border-neon-pink"
             onPress={handleLogout}
           >
             <Text className="text-base mr-3">🚪</Text>
-            <Text className="text-red-600 font-medium">Se déconnecter</Text>
+            <Text className="text-neon-pink font-medium">Se déconnecter</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

@@ -24,16 +24,16 @@ function TransactionItem({ item }: { item: Transaction }) {
   };
 
   return (
-    <View className="bg-white rounded-2xl px-4 py-3 mb-2 flex-row items-center border border-gray-100">
-      <View className="w-10 h-10 rounded-full bg-gray-100 items-center justify-center mr-3">
+    <View className="bg-bg-secondary rounded-2xl px-4 py-3 mb-2 flex-row items-center border-2 border-neon-cyan/20">
+      <View className="w-10 h-10 rounded-full bg-neon-cyan/20 items-center justify-center mr-3 border border-neon-cyan/30">
         <Text className="text-xl">{icons[item.type] ?? '💰'}</Text>
       </View>
       <View className="flex-1">
-        <Text className="text-gray-900 font-medium text-sm">
+        <Text className="text-text-primary font-medium text-sm">
           {item.description ?? item.type}
         </Text>
-        {item.game && <Text className="text-gray-400 text-xs">{item.game.name}</Text>}
-        <Text className="text-gray-400 text-xs">
+        {item.game && <Text className="text-text-secondary text-xs">{item.game.name}</Text>}
+        <Text className="text-text-secondary text-xs">
           {new Date(item.createdAt).toLocaleDateString('fr-FR', {
             day: 'numeric',
             month: 'short',
@@ -45,11 +45,11 @@ function TransactionItem({ item }: { item: Transaction }) {
       </View>
       <View className="items-end">
         <Text
-          className={`font-bold text-base ${isCredit ? 'text-green-600' : 'text-red-500'}`}
+          className={`font-bold text-base ${isCredit ? 'text-neon-yellow' : 'text-neon-pink'}`}
         >
           {isCredit ? '+' : ''}{item.amount} u
         </Text>
-        <Text className="text-gray-400 text-xs">Solde: {item.balanceAfter}</Text>
+        <Text className="text-text-secondary text-xs">Solde: {item.balanceAfter}</Text>
       </View>
     </View>
   );
@@ -62,15 +62,15 @@ export default function HistoryScreen() {
   });
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50">
+    <SafeAreaView className="flex-1 bg-bg-primary">
       <View className="px-4 pt-4 pb-2">
-        <Text className="text-2xl font-bold text-gray-900">Historique ⏱</Text>
-        <Text className="text-gray-500 text-sm mt-1">Vos dernières transactions</Text>
+        <Text className="text-2xl font-bold text-neon-cyan">Historique ⏱</Text>
+        <Text className="text-text-secondary text-sm mt-1">Vos dernières transactions</Text>
       </View>
 
       {isLoading ? (
         <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" color="#6366f1" />
+          <ActivityIndicator size="large" color="#00D3FF" />
         </View>
       ) : (
         <FlatList

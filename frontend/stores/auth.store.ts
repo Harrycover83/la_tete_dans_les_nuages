@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import * as SecureStore from 'expo-secure-store';
+import { storage } from '../utils/storage';
+import { STORAGE_KEYS } from '../constants/storage-keys';
 import { authService } from '../services/auth.service';
 
 interface User {
@@ -31,7 +32,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   initialize: async () => {
     try {
-      const token = await SecureStore.getItemAsync('accessToken');
+      const token = await storage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
       if (token) {
         set({ accessToken: token, isAuthenticated: true });
       }
@@ -44,8 +45,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   login: async (email, password) => {
     const result = await authService.login({ email, password });
-    await SecureStore.setItemAsync('accessToken', result.accessToken);
-    await SecureStore.setItemAsync('refreshToken', result.refreshToken);
+    await storage.setItem(STORAGE_KEYS.ACCESS_TOKEN, result.accessToken);
+    await storage.setItem(STORAGE_KEYS.REFRESH_TOKEN, result.refreshToken);
     set({
       user: result.user,
       accessToken: result.accessToken,
@@ -55,11 +56,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   logout: async () => {
     try {
-      const refreshToken = await SecureStore.getItemAsync('refreshToken');
+      const refreshToken = await storage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
       if (refreshToken) await authService.logout(refreshToken);
     } finally {
-      await SecureStore.deleteItemAsync('accessToken');
-      await SecureStore.deleteItemAsync('refreshToken');
+      await storage.deleteItem(STORAGE_KEYS.ACCESS_TOKEN);
+      await storage.deleteItem(STORAGE_KEYS.REFRESH_TOKEN);
       set({ user: null, accessToken: null, isAuthenticated: false });
     }
   },

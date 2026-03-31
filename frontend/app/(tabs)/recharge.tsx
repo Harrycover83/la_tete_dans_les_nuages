@@ -69,53 +69,53 @@ function RechargeContent() {
   if (isLoading) {
     return (
       <View className="flex-1 items-center justify-center">
-        <ActivityIndicator size="large" color="#6366f1" />
+        <ActivityIndicator size="large" color="#00D3FF" />
       </View>
     );
   }
 
   return (
     <ScrollView className="flex-1" contentContainerClassName="px-4 pb-8">
-      <Text className="text-gray-600 mb-6">Choisissez un pack de recharge :</Text>
+      <Text className="text-text-secondary mb-6">Choisissez un pack de recharge :</Text>
 
       {packs?.map((pack: Pack) => (
         <TouchableOpacity
           key={pack.id}
           className={`rounded-2xl p-4 mb-3 border-2 ${
             selectedPack?.id === pack.id
-              ? 'border-primary-500 bg-primary-50'
-              : 'border-gray-200 bg-white'
+              ? 'border-neon-cyan bg-neon-cyan/10'
+              : 'border-neon-pink/30 bg-bg-secondary'
           }`}
           onPress={() => setSelectedPack(pack)}
         >
           <View className="flex-row justify-between items-center">
             <View>
-              <Text className="font-semibold text-gray-900 text-base">{pack.name}</Text>
-              <Text className="text-gray-500 text-sm">
+              <Text className="font-semibold text-text-primary text-base">{pack.name}</Text>
+              <Text className="text-text-secondary text-sm">
                 {pack.units} unités
                 {pack.bonusUnits > 0 && (
-                  <Text className="text-green-600"> + {pack.bonusUnits} bonus</Text>
+                  <Text className="text-neon-yellow"> + {pack.bonusUnits} bonus</Text>
                 )}
               </Text>
             </View>
             <View className="items-end">
-              <Text className="text-2xl font-bold text-primary-600">{pack.priceEur}€</Text>
-              {selectedPack?.id === pack.id && <Text className="text-primary-500 text-xs">✓ Sélectionné</Text>}
+              <Text className="text-2xl font-bold text-neon-cyan">{pack.priceEur}€</Text>
+              {selectedPack?.id === pack.id && <Text className="text-neon-cyan text-xs">✓ Sélectionné</Text>}
             </View>
           </View>
         </TouchableOpacity>
       ))}
 
       {selectedPack && (
-        <View className="mt-4 bg-gray-50 rounded-2xl p-4 mb-6">
-          <Text className="font-semibold text-gray-700 mb-2">Récapitulatif</Text>
+        <View className="mt-4 bg-bg-secondary rounded-2xl p-4 mb-6 border border-neon-pink/30">
+          <Text className="font-semibold text-neon-pink mb-2">Récapitulatif</Text>
           <View className="flex-row justify-between">
-            <Text className="text-gray-600">Pack "{selectedPack.name}"</Text>
-            <Text className="font-semibold">{selectedPack.priceEur}€</Text>
+            <Text className="text-text-secondary">Pack "{selectedPack.name}"</Text>
+            <Text className="font-semibold text-text-primary">{selectedPack.priceEur}€</Text>
           </View>
           <View className="flex-row justify-between mt-1">
-            <Text className="text-gray-600">Unités créditées</Text>
-            <Text className="font-semibold text-primary-600">
+            <Text className="text-text-secondary">Unités créditées</Text>
+            <Text className="font-semibold text-neon-yellow">
               {selectedPack.units + selectedPack.bonusUnits} unités
             </Text>
           </View>
@@ -123,8 +123,8 @@ function RechargeContent() {
       )}
 
       <TouchableOpacity
-        className={`rounded-xl py-4 items-center ${
-          selectedPack ? 'bg-primary-600' : 'bg-gray-300'
+        className={`rounded-xl py-4 items-center border-2 ${
+          selectedPack ? 'bg-neon-cyan border-neon-cyan' : 'bg-bg-secondary border-neon-cyan/20'
         }`}
         onPress={handleRecharge}
         disabled={!selectedPack || loading}
@@ -132,7 +132,9 @@ function RechargeContent() {
         {loading ? (
           <ActivityIndicator color="white" />
         ) : (
-          <Text className="text-white font-semibold text-base">
+          <Text className={`font-semibold text-base ${
+            selectedPack ? 'text-bg-primary' : 'text-text-secondary'
+          }`}>
             {selectedPack ? `Payer ${selectedPack.priceEur}€` : 'Sélectionnez un pack'}
           </Text>
         )}
@@ -144,9 +146,9 @@ function RechargeContent() {
 export default function RechargeScreen() {
   return (
     <StripeProvider publishableKey={STRIPE_KEY}>
-      <SafeAreaView className="flex-1 bg-gray-50">
+      <SafeAreaView className="flex-1 bg-bg-primary">
         <View className="px-4 pt-4 pb-2">
-          <Text className="text-2xl font-bold text-gray-900">Recharger 💰</Text>
+          <Text className="text-2xl font-bold text-neon-cyan">Recharger 💰</Text>
         </View>
         <RechargeContent />
       </SafeAreaView>

@@ -4,6 +4,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { prisma } from '../utils/prisma';
 import { config } from '../utils/config';
 import { sendVerificationEmail, sendPasswordResetEmail } from '../utils/mailer';
+import { ERROR_CODES } from '../constants/error-codes';
+import { BUSINESS_CONSTANTS } from '../constants/business';
 
 export async function register(
   email: string,
@@ -13,7 +15,7 @@ export async function register(
   dateOfBirth?: string
 ) {
   const existing = await prisma.user.findUnique({ where: { email } });
-  if (existing) throw new Error('EMAIL_TAKEN');
+  if (existing) throw new Error(ERROR_CODES.EMAIL_TAKEN);
 
   const passwordHash = await bcrypt.hash(password, 12);
   const emailVerifyToken = uuidv4();
@@ -36,7 +38,7 @@ export async function register(
 
 export async function verifyEmail(token: string) {
   const user = await prisma.user.findFirst({ where: { emailVerifyToken: token } });
-  if (!user) throw new Error('INVALID_TOKEN');
+  if (!user) throw new Error(ERROR_CODES.INVALID_TOKEN);
 
   await prisma.user.update({
     where: { id: user.id },
@@ -46,16 +48,16 @@ export async function verifyEmail(token: string) {
 
 export async function login(email: string, password: string) {
   const user = await prisma.user.findUnique({ where: { email } });
-  if (!user) throw new Error('INVALID_CREDENTIALS');
+  if (!user) throw new Error(ERROR_CODES.INVALID_CREDENTIALS);
 
   const valid = await bcrypt.compare(password, user.passwordHash);
-  if (!valid) throw new Error('INVALID_CREDENTIALS');
+  if (!valid) throw new Error(ERROR_CODES.INVALID_CREDENTIALS);
 
   const accessToken = generateAccessToken(user.id, user.role);
   const refreshToken = uuidv4();
 
   const expiresAt = new Date();
-  expiresAt.setDate(expiresAt.getDate() + 7);
+  expiresAt.setDate(expiresAt.getDate() + BUSINESS_CONSTANTS.REFRESH_TOKEN_VALIDITY_DAYS);
 
   await prisma.refreshToken.create({
     data: { token: refreshToken, userId: user.id, expiresAt },
@@ -84,7 +86,7 @@ export async function refreshAccessToken(refreshToken: string) {
 
   if (!stored || stored.expiresAt < new Date()) {
     if (stored) await prisma.refreshToken.delete({ where: { id: stored.id } });
-    throw new Error('INVALID_REFRESH_TOKEN');
+    throw new Error(ERROR_CODES.INVALID_REFRESH_TOKEN);
   }
 
   const accessToken = generateAccessToken(stored.user.id, stored.user.role);
@@ -100,7 +102,7 @@ export async function forgotPassword(email: string) {
   if (!user) return; // silently ignore for security
 
   const token = uuidv4();
-  const expiresAt = new Date(Date.now() + 3600 * 1000); // 1 hour
+  const expiresAt = new Date(Date.now() + BUSINESS_CONSTANTS.PASSWORD_RESET_TOKEN_VALIDITY_MS);
 
   await prisma.user.update({
     where: { id: user.id },
@@ -117,7 +119,7 @@ export async function resetPassword(token: string, newPassword: string) {
       passwordResetExpiry: { gt: new Date() },
     },
   });
-  if (!user) throw new Error('INVALID_OR_EXPIRED_TOKEN');
+  if (!user) throw new Error(ERROR_CODES.INVALID_OR_EXPIRED_TOKEN);
 
   const passwordHash = await bcrypt.hash(newPassword, 12);
   await prisma.user.update({
