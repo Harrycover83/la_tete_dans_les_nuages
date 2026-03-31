@@ -1,0 +1,253 @@
+# Prisma schema for "Tête dans les Nuages"
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Users & Auth ───────────────────────────────────────────────────────────
+
+model User {
+  id                String    @id @default(uuid())
+  email             String    @unique
+  passwordHash      String
+  firstName         String
+  lastName          String
+  dateOfBirth       DateTime?
+  avatarUrl         String?
+  emailVerified     Boolean   @default(false)
+  emailVerifyToken  String?
+  passwordResetToken  String?
+  passwordResetExpiry DateTime?
+  role              Role      @default(USER)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  refreshTokens     RefreshToken[]
+  card              Card?
+  transactions      Transaction[]
+  gameSessions      GameSession[]
+  userBadges        UserBadge[]
+  leaderboardEntries LeaderboardEntry[]
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+// ─── Card & Transactions ─────────────────────────────────────────────────────
+
+model Card {
+  id           String   @id @default(uuid())
+  cardId       String   @unique @default(uuid())
+  nfcToken     String?  @unique
+  balance      Int      @default(0) // balance in units
+  userId       String   @unique
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+
+  @@map("cards")
+}
+
+model Transaction {
+  id           String          @id @default(uuid())
+  type         TransactionType
+  amount       Int             // units (positive = credit, negative = debit)
+  balanceAfter Int
+  description  String?
+  gameId       String?
+  machineId    String?
+  stripePaymentId String?
+  userId       String
+  cardId       String
+  createdAt    DateTime        @default(now())
+
+  user   User @relation(fields: [userId], references: [id])
+  card   Card @relation(fields: [cardId], references: [id])
+  game   Game? @relation(fields: [gameId], references: [id])
+
+  @@map("transactions")
+}
+
+enum TransactionType {
+  RECHARGE
+  DEBIT
+  BONUS
+  REFUND
+}
+
+// ─── Recharge Packs ──────────────────────────────────────────────────────────
+
+model RechargePack {
+  id         String  @id @default(uuid())
+  name       String
+  priceEur   Float   // price in euros
+  units      Int     // units credited
+  bonusUnits Int     @default(0)
+  isActive   Boolean @default(true)
+  sortOrder  Int     @default(0)
+
+  @@map("recharge_packs")
+}
+
+// ─── Venues (Salles) ─────────────────────────────────────────────────────────
+
+model Venue {
+  id          String   @id @default(uuid())
+  name        String
+  address     String?
+  city        String?
+  imageUrl    String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  games    GameVenue[]
+  articles ArticleVenue[]
+
+  @@map("venues")
+}
+
+// ─── Games ────────────────────────────────────────────────────────────────────
+
+model Game {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  imageUrl    String?
+  category    String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  venues           GameVenue[]
+  gameSessions     GameSession[]
+  leaderboard      LeaderboardEntry[]
+  transactions     Transaction[]
+
+  @@map("games")
+}
+
+model GameVenue {
+  gameId  String
+  venueId String
+
+  game  Game  @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  venue Venue @relation(fields: [venueId], references: [id], onDelete: Cascade)
+
+  @@id([gameId, venueId])
+  @@map("game_venues")
+}
+
+// ─── Gazette (Articles) ──────────────────────────────────────────────────────
+
+model Article {
+  id          String      @id @default(uuid())
+  title       String
+  coverImage  String?
+  body        String      // Markdown content
+  category    ArticleCategory
+  isPinned    Boolean     @default(false)
+  publishedAt DateTime    @default(now())
+  expiresAt   DateTime?
+  authorId    String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  venues ArticleVenue[]
+
+  @@map("articles")
+}
+
+model ArticleVenue {
+  articleId String
+  venueId   String
+
+  article Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  venue   Venue   @relation(fields: [venueId], references: [id], onDelete: Cascade)
+
+  @@id([articleId, venueId])
+  @@map("article_venues")
+}
+
+enum ArticleCategory {
+  NEWS
+  PROMOTION
+  EVENT
+}
+
+// ─── Gamification ────────────────────────────────────────────────────────────
+
+model GameSession {
+  id        String   @id @default(uuid())
+  userId    String
+  gameId    String
+  score     Int      @default(0)
+  duration  Int      @default(0) // seconds
+  xpEarned  Int      @default(0)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+  game Game @relation(fields: [gameId], references: [id])
+
+  @@map("game_sessions")
+}
+
+model LeaderboardEntry {
+  id       String @id @default(uuid())
+  userId   String
+  gameId   String
+  maxScore Int    @default(0)
+  totalXp  Int    @default(0)
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+  game Game @relation(fields: [gameId], references: [id])
+
+  @@unique([userId, gameId])
+  @@map("leaderboard_entries")
+}
+
+model Badge {
+  id          String      @id @default(uuid())
+  name        String
+  description String?
+  iconUrl     String?
+  condition   String?     // trigger condition description
+
+  userBadges UserBadge[]
+
+  @@map("badges")
+}
+
+model UserBadge {
+  id        String   @id @default(uuid())
+  userId    String
+  badgeId   String
+  earnedAt  DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge Badge @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, badgeId])
+  @@map("user_badges")
+}
