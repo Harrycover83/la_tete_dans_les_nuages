@@ -7,14 +7,14 @@
 export const COLORS = {
   // === Fonds ===
   background: {
-    /** Fond principal — bleu cobalt vibrant (dominant sur le site officiel) */
-    primary: '#1B1C72',
-    /** Fond secondaire — violet nuit profond (cartes, sections profondes) */
-    secondary: '#0B022E',
+    /** Fond principal — deep space navy (espace profond, fond dominant) */
+    primary: '#040D21',
+    /** Fond secondaire — dark blue (cartes, sections) */
+    secondary: '#071333',
     /** Fond carte / surface élevée */
-    card: '#12063E',
+    card: '#0C1A45',
     /** Fond overlay (modales) */
-    overlay: 'rgba(11, 2, 46, 0.92)',
+    overlay: 'rgba(4, 13, 33, 0.94)',
   },
 
   // === Couleurs d'accent (neon) ===

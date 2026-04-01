@@ -40,4 +40,23 @@ export const CACHE_KEYS = {
    * Clé pour la liste des packs de recharge
    */
   RECHARGE_PACKS: 'recharge:packs:all',
+
+  /**
+   * Clé pour la liste des venues actives (avec coordonnées)
+   */
+  VENUES_ALL: 'venues:all',
+
+  /**
+   * Clé pour la liste des événements à venir
+   */
+  EVENTS_UPCOMING: 'events:upcoming',
+
+  /**
+   * Clé pour les réservations d'un utilisateur
+   */
+  USER_BOOKINGS: (userId: string) => `user:bookings:${userId}`,
+  /**
+   * Clé pour les réservations de session d'un utilisateur
+   */
+  USER_SESSION_BOOKINGS: (userId: string) => `user:session-bookings:${userId}`,
 } as const;

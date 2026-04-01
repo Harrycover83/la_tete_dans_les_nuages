@@ -33,3 +33,30 @@ export const LINE_HEIGHT = {
   normal: 1.5,
   relaxed: 1.75,
 } as const;
+
+/**
+ * Ombres de texte — liseret bleu ciel ultra-fin qui évoque les nuages.
+ * S'applique en spread dans le `style` prop d'un <Text>.
+ *
+ * Exemple : <Text style={{ color: '#FFF', fontSize: 28, ...TEXT_SHADOW.cloudGlow }}>
+ */
+export const TEXT_SHADOW = {
+  /** Liseret bleu ciel très fin — titres principaux (≥ 22 px) */
+  cloudGlow: {
+    textShadowColor: 'rgba(135, 206, 255, 0.8)',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 3,
+  },
+  /** Plus serré — sous-titres / textes md */
+  cloudGlowSubtle: {
+    textShadowColor: 'rgba(135, 206, 255, 0.55)',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 1.5,
+  },
+  /** Fort — très grands affichages (≥ 40 px) */
+  cloudGlowStrong: {
+    textShadowColor: 'rgba(135, 206, 255, 0.9)',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 5,
+  },
+} as const;

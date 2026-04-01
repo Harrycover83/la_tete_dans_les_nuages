@@ -1,0 +1,373 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e5]:
+    - link [ref=e7] [cursor=pointer]:
+      - /url: https://latetedanslesnuages.com
+      - img [ref=e8]
+      - img [ref=e13]
+    - generic [ref=e16]:
+      - link "Réserver" [ref=e17] [cursor=pointer]:
+        - /url: https://s.latetedanslesnuages.com/
+        - generic [ref=e18]: Réserver
+        - img [ref=e20]
+      - generic [ref=e22]:
+        - text: 
+        - button "Main Menu" [ref=e23] [cursor=pointer]:
+          - img [ref=e24]
+        - text: 
+  - generic [ref=e28]:
+    - button [ref=e29] [cursor=pointer]:
+      - generic [ref=e30]: 
+    - generic [ref=e32]:
+      - list [ref=e34]:
+        - listitem [ref=e35]:
+          - link "Nos Centres" [ref=e36] [cursor=pointer]:
+            - /url: /centres/
+        - listitem [ref=e37]:
+          - link "Nos Offres" [ref=e38] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/nos-offres/
+        - listitem [ref=e39]:
+          - link "Nos Expériences" [ref=e40] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/nos-experiences/
+        - listitem [ref=e41]:
+          - link "Nos Tarifs" [ref=e42] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/nos-tarifs/
+        - listitem [ref=e43]:
+          - link "Réserver un Anniversaire KIDS" [ref=e44] [cursor=pointer]:
+            - /url: https://s.latetedanslesnuages.com/
+            - generic [ref=e45]: 
+            - text: Réserver un Anniversaire KIDS
+        - listitem [ref=e46]:
+          - link "Réserver une soirée FreePlay !" [ref=e47] [cursor=pointer]:
+            - /url: https://s.latetedanslesnuages.com/
+            - generic [ref=e48]: 
+            - text: Réserver une soirée FreePlay !
+        - listitem [ref=e49]:
+          - link "Réserver un Laser Game" [ref=e50] [cursor=pointer]:
+            - /url: https://s.latetedanslesnuages.com/
+            - generic [ref=e51]: 
+            - text: Réserver un Laser Game
+        - listitem [ref=e52]:
+          - link "Privatisations" [ref=e53] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/privatisation/
+        - listitem [ref=e54]:
+          - link "Last News !" [ref=e55] [cursor=pointer]:
+            - /url: /news/
+        - listitem [ref=e56]:
+          - link "Recrutement" [ref=e57] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/nos-offres-demploi/
+      - list [ref=e59]:
+        - listitem [ref=e60]:
+          - link "FAQ" [ref=e61] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/faq/
+        - listitem [ref=e62]:
+          - link "Investisseurs" [ref=e63] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/investisseurs/
+        - listitem [ref=e64]:
+          - link "Accueil" [ref=e65] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/
+      - generic [ref=e66]:
+        - generic [ref=e67]:
+          - link [ref=e68] [cursor=pointer]:
+            - /url: https://s.latetedanslesnuages.com/user/login-signup
+            - generic [ref=e69]: 
+          - generic [ref=e71] [cursor=pointer]: Compte client
+        - list [ref=e72]:
+          - generic [ref=e73] [cursor=pointer]:
+            - text: FR
+            - generic [ref=e74]: 
+          - list [ref=e75]:
+            - listitem [ref=e76]:
+              - link "EN" [ref=e77] [cursor=pointer]:
+                - /url: https://latetedanslesnuages.com/en/
+            - listitem [ref=e78]:
+              - link "ES" [ref=e79] [cursor=pointer]:
+                - /url: https://latetedanslesnuages.com/es/
+            - listitem [ref=e80]:
+              - link "IT" [ref=e81] [cursor=pointer]:
+                - /url: https://latetedanslesnuages.com/it/
+        - link "Contact" [ref=e82] [cursor=pointer]:
+          - /url: /contact/
+          - generic [ref=e83]: Contact
+          - img [ref=e85]
+      - link [ref=e88] [cursor=pointer]:
+        - /url: https://www.instagram.com/latetedanslesnuages_officiel/
+        - generic [ref=e89]: 
+  - generic [ref=e98]:
+    - generic:
+      - img
+      - img
+    - heading "Nos expériences" [level=2] [ref=e101]
+    - group "Splide Basic HTML Example" [ref=e102]:
+      - generic [ref=e103]:
+        - generic "Go to last slide" [ref=e104] [cursor=pointer]:
+          - img [ref=e105]
+        - generic "Next slide" [ref=e108] [cursor=pointer]:
+          - img [ref=e109]
+      - generic [ref=e112]:
+        - group [ref=e113]:
+          - generic [ref=e114]:
+            - heading [level=3] [ref=e116]: "Privé : Laser Game Paris – Aéroville"
+            - link [ref=e117] [cursor=pointer]:
+              - /url: https://latetedanslesnuages.com/?post_type=experiences&p=6793
+          - link [ref=e118] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/?post_type=experiences&p=6793
+            - generic [ref=e119]: Découvrir
+            - img [ref=e121]
+        - group [ref=e123]:
+          - generic [ref=e124]:
+            - heading [level=3] [ref=e126]: Réalité Virtuelle & Expériences VR Immersives
+            - link [ref=e127] [cursor=pointer]:
+              - /url: https://latetedanslesnuages.com/experiences/vr-realite-virtuelle/
+          - link [ref=e128] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/experiences/vr-realite-virtuelle/
+            - generic [ref=e129]: Découvrir
+            - img [ref=e131]
+        - group [ref=e133]:
+          - generic [ref=e134]:
+            - heading [level=3] [ref=e136]: Flippers
+            - link [ref=e137] [cursor=pointer]:
+              - /url: https://latetedanslesnuages.com/experiences/flippers/
+          - link [ref=e138] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/experiences/flippers/
+            - generic [ref=e139]: Découvrir
+            - img [ref=e141]
+        - group "1 of 10" [ref=e143]:
+          - generic [ref=e144]:
+            - heading "Activités enfants – Univers KIDS" [level=3] [ref=e146]
+            - link [ref=e147] [cursor=pointer]:
+              - /url: https://latetedanslesnuages.com/experiences/activites-enfants/
+          - link "Découvrir" [ref=e148] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/experiences/activites-enfants/
+            - generic [ref=e149]: Découvrir
+            - img [ref=e151]
+        - group [ref=e153]:
+          - generic [ref=e154]:
+            - heading [level=3] [ref=e156]: Jeux de sport
+            - link [ref=e157] [cursor=pointer]:
+              - /url: https://latetedanslesnuages.com/experiences/defis-sportifs/
+          - link [ref=e158] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/experiences/defis-sportifs/
+            - generic [ref=e159]: Découvrir
+            - img [ref=e161]
+        - group [ref=e163]:
+          - generic [ref=e164]:
+            - heading [level=3] [ref=e166]: Bornes d’Arcade et Jeux Vidéo
+            - link [ref=e167] [cursor=pointer]:
+              - /url: https://latetedanslesnuages.com/experiences/bornes-darcade/
+          - link [ref=e168] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/experiences/bornes-darcade/
+            - generic [ref=e169]: Découvrir
+            - img [ref=e171]
+        - group [ref=e173]:
+          - generic [ref=e174]:
+            - heading [level=3] [ref=e176]: Une aire de jeux enfants au cœur des nuages !
+            - link [ref=e177] [cursor=pointer]:
+              - /url: https://latetedanslesnuages.com/experiences/cloud-climb-aire-de-jeux/
+          - link [ref=e178] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/experiences/cloud-climb-aire-de-jeux/
+            - generic [ref=e179]: Découvrir
+            - img [ref=e181]
+        - group [ref=e183]:
+          - generic [ref=e184]:
+            - heading [level=3] [ref=e186]: Bowling
+            - link [ref=e187] [cursor=pointer]:
+              - /url: https://latetedanslesnuages.com/experiences/bowling/
+          - link [ref=e188] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/experiences/bowling/
+            - generic [ref=e189]: Découvrir
+            - img [ref=e191]
+        - group [ref=e193]:
+          - generic [ref=e194]:
+            - heading [level=3] [ref=e196]: Attractions à sensations
+            - link [ref=e197] [cursor=pointer]:
+              - /url: https://latetedanslesnuages.com/experiences/attractions-a-sensations/
+          - link [ref=e198] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/experiences/attractions-a-sensations/
+            - generic [ref=e199]: Découvrir
+            - img [ref=e201]
+        - group [ref=e203]:
+          - generic [ref=e204]:
+            - heading [level=3] [ref=e206]: Laser Game
+            - link [ref=e207] [cursor=pointer]:
+              - /url: https://latetedanslesnuages.com/experiences/laser-game-paris/
+          - link [ref=e208] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/experiences/laser-game-paris/
+            - generic [ref=e209]: Découvrir
+            - img [ref=e211]
+        - group [ref=e213]:
+          - generic [ref=e214]:
+            - heading [level=3] [ref=e216]: "Privé : Laser Game Paris – Aéroville"
+            - link [ref=e217] [cursor=pointer]:
+              - /url: https://latetedanslesnuages.com/?post_type=experiences&p=6793
+          - link [ref=e218] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/?post_type=experiences&p=6793
+            - generic [ref=e219]: Découvrir
+            - img [ref=e221]
+        - group [ref=e223]:
+          - generic [ref=e224]:
+            - heading [level=3] [ref=e226]: Réalité Virtuelle & Expériences VR Immersives
+            - link [ref=e227] [cursor=pointer]:
+              - /url: https://latetedanslesnuages.com/experiences/vr-realite-virtuelle/
+          - link [ref=e228] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/experiences/vr-realite-virtuelle/
+            - generic [ref=e229]: Découvrir
+            - img [ref=e231]
+        - group [ref=e233]:
+          - generic [ref=e234]:
+            - heading [level=3] [ref=e236]: Flippers
+            - link [ref=e237] [cursor=pointer]:
+              - /url: https://latetedanslesnuages.com/experiences/flippers/
+          - link [ref=e238] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/experiences/flippers/
+            - generic [ref=e239]: Découvrir
+            - img [ref=e241]
+        - group [ref=e243]:
+          - generic [ref=e244]:
+            - heading [level=3] [ref=e246]: Activités enfants – Univers KIDS
+            - link [ref=e247] [cursor=pointer]:
+              - /url: https://latetedanslesnuages.com/experiences/activites-enfants/
+          - link [ref=e248] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/experiences/activites-enfants/
+            - generic [ref=e249]: Découvrir
+            - img [ref=e251]
+        - group [ref=e253]:
+          - generic [ref=e254]:
+            - heading [level=3] [ref=e256]: Jeux de sport
+            - link [ref=e257] [cursor=pointer]:
+              - /url: https://latetedanslesnuages.com/experiences/defis-sportifs/
+          - link [ref=e258] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/experiences/defis-sportifs/
+            - generic [ref=e259]: Découvrir
+            - img [ref=e261]
+        - group [ref=e263]:
+          - generic [ref=e264]:
+            - heading [level=3] [ref=e266]: Bornes d’Arcade et Jeux Vidéo
+            - link [ref=e267] [cursor=pointer]:
+              - /url: https://latetedanslesnuages.com/experiences/bornes-darcade/
+          - link [ref=e268] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/experiences/bornes-darcade/
+            - generic [ref=e269]: Découvrir
+            - img [ref=e271]
+  - generic [ref=e273]:
+    - heading "Nos offres" [level=2] [ref=e276]
+    - generic [ref=e278]:
+      - link "Tout voir" [ref=e280] [cursor=pointer]:
+        - /url: https://latetedanslesnuages.com/nos offres/
+        - generic [ref=e281]: Tout voir
+        - img [ref=e283]
+      - generic [ref=e285]:
+        - generic [ref=e287]:
+          - heading "Anniversaire enfant" [level=3] [ref=e289]
+          - link [ref=e290] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/offers/anniversaire-enfant/
+          - link "Réserver" [ref=e291] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/offers/anniversaire-enfant/
+            - generic [ref=e292]: Réserver
+            - img [ref=e294]
+        - generic [ref=e297]:
+          - heading "Privatisation Entreprises, Team Building, Séminaires" [level=3] [ref=e299]
+          - link [ref=e300] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/offers/privatisation-entreprises/
+          - link "Réserver" [ref=e301] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/offers/privatisation-entreprises/
+            - generic [ref=e302]: Réserver
+            - img [ref=e304]
+        - generic [ref=e307]:
+          - heading "Laser Game Paris" [level=3] [ref=e309]
+          - link [ref=e310] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/offers/laser-game-paris/
+          - link "Réserver" [ref=e311] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/offers/laser-game-paris/
+            - generic [ref=e312]: Réserver
+            - img [ref=e314]
+  - generic [ref=e316]:
+    - generic:
+      - img
+    - heading "News" [level=2] [ref=e319]
+    - region [ref=e320]:
+      - generic [ref=e321]:
+        - link "Tout voir" [ref=e323] [cursor=pointer]:
+          - /url: https://latetedanslesnuages.com/news/
+          - generic [ref=e324]: Tout voir
+          - img [ref=e326]
+        - group "1 of 3" [ref=e328]:
+          - link [ref=e330] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/news/idee-activite-saint-valentin/
+          - 'heading "Idée activité Saint-Valentin : Pourquoi choisir une salle d’arcade" [level=4] [ref=e332]'
+        - group [ref=e333]:
+          - link [ref=e335] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/news/activites-familiales-decouvrez-le-meilleur-centre-de-loisirs-indoor/
+          - heading [level=4] [ref=e337]: "Activités familiales : Découvrez le meilleur centre de loisirs indoor"
+        - group [ref=e338]:
+          - link [ref=e340] [cursor=pointer]:
+            - /url: https://latetedanslesnuages.com/news/grand-jeu-concours-de-noel/
+          - heading [level=4] [ref=e342]: GRAND JEU CONCOURS DE NOËL
+  - contentinfo [ref=e343]:
+    - generic:
+      - img
+      - img
+    - generic:
+      - img "cloud"
+    - generic [ref=e345]:
+      - img "logo-ltdln" [ref=e347]
+      - generic [ref=e348]:
+        - generic [ref=e350]:
+          - heading "Restez informés de nos actus et bons plans !" [level=4] [ref=e351]
+          - group "Newsletter" [ref=e355]:
+            - generic [ref=e356]: Newsletter
+            - generic [ref=e357]:
+              - generic [ref=e358]:
+                - generic [ref=e359] [cursor=pointer]: "*"
+                - textbox [ref=e360]:
+                  - /placeholder: Votre adresse mail
+              - button "S'inscrire" [ref=e362] [cursor=pointer]:
+                - generic [ref=e363]: S'inscrire
+                - img [ref=e365]
+          - paragraph [ref=e367]: En vous abonnant, vous acceptez de recevoir nos newsletters. Pour plus d’informations, consulter notre Politique de confidentialité.
+        - generic [ref=e369]:
+          - heading "La Tête dans les Nuages" [level=4] [ref=e371]
+          - generic [ref=e372]:
+            - link "Nos centres" [ref=e374] [cursor=pointer]:
+              - /url: /nos-centres/
+            - link "Nos tarifs" [ref=e376] [cursor=pointer]:
+              - /url: https://latetedanslesnuages.com/nos-tarifs/
+            - link "Recrutement" [ref=e378] [cursor=pointer]:
+              - /url: /nos-offres-demploi/
+            - link "FAQ" [ref=e380] [cursor=pointer]:
+              - /url: /faq/
+            - link "Investisseurs" [ref=e382] [cursor=pointer]:
+              - /url: https://latetedanslesnuages.com/investisseurs/
+        - generic [ref=e384]:
+          - heading "Nos Offres" [level=4] [ref=e386]
+          - generic [ref=e387]:
+            - link "Anniversaire KIDS" [ref=e389] [cursor=pointer]:
+              - /url: https://latetedanslesnuages.com/offers/anniversaire/
+            - link "Privatisation" [ref=e391] [cursor=pointer]:
+              - /url: https://latetedanslesnuages.com/offers/privatisation/
+            - link "FreePlay" [ref=e393] [cursor=pointer]:
+              - /url: https://latetedanslesnuages.com/offers/freeplay/
+            - generic:
+              - link:
+                - /url: ""
+            - link "Laser Game" [ref=e395] [cursor=pointer]:
+              - /url: https://latetedanslesnuages.com/offers/laser-game/
+            - generic:
+              - link:
+                - /url: ""
+        - generic [ref=e396]:
+          - generic [ref=e397]:
+            - heading "Nous contacter" [level=4] [ref=e398]
+            - paragraph [ref=e399]
+            - link "Contact" [ref=e401] [cursor=pointer]:
+              - /url: /contact/
+              - generic [ref=e402]: Contact
+              - img [ref=e404]
+          - link [ref=e409] [cursor=pointer]:
+            - /url: https://www.instagram.com/latetedanslesnuages_officiel/?hl=fr
+            - img [ref=e410]
+    - generic [ref=e415]:
+      - text: La Tête dans les Nuages 2026
+      - generic [ref=e416]:
+        - text: "-"
+        - link "CGV - CGU - Cookies - Mentions légales" [ref=e417] [cursor=pointer]:
+          - /url: https://s.latetedanslesnuages.com/about/tos

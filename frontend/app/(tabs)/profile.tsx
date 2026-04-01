@@ -1,118 +1,302 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, Alert, ScrollView } from 'react-native';
+﻿import React from 'react';
+import { View, Text, TouchableOpacity, Alert, ScrollView, FlatList } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { StarBackground } from '../../components/StarBackground';
+import { TEXT_SHADOW } from '../../constants/typography';
 import { useAuthStore } from '../../stores/auth.store';
-import { userService } from '../../services';
+import { userService, cardService, leaderboardService } from '../../services';
+import { ROUTES } from '../../constants/routes';
+
+interface UserBadge {
+  id: string;
+  badge: { name: string; icon: string };
+}
+
+interface UserStats {
+  totalXp: number;
+  gameSessions: { id: string }[];
+  userBadges: UserBadge[];
+}
+
+interface Transaction {
+  id: string;
+  type: 'RECHARGE' | 'DEBIT' | 'BONUS' | 'REFUND';
+  amount: number;
+  description?: string;
+  createdAt: string;
+}
+
+const TX_CONFIG = {
+  RECHARGE: { color: '#00D3FF', icon: 'arrow-down-circle-outline' as const, sign: '+' },
+  DEBIT:    { color: '#FE53BB', icon: 'arrow-up-circle-outline' as const, sign: '-' },
+  BONUS:    { color: '#FFC700', icon: 'star-outline' as const, sign: '+' },
+  REFUND:   { color: '#FF6B35', icon: 'refresh-outline' as const, sign: '+' },
+};
+
+const MENU_ITEMS = [
+  { icon: 'pencil-outline' as const, label: 'Modifier le profil', route: ROUTES.EDIT_PROFILE },
+  { icon: 'notifications-outline' as const, label: 'Notifications', route: ROUTES.NOTIFICATIONS },
+  { icon: 'help-circle-outline' as const, label: 'Aide & Support', route: ROUTES.SUPPORT },
+];
 
 export default function ProfileScreen() {
   const { user, logout } = useAuthStore();
 
-  const { data: stats } = useQuery({
+  const { data: stats } = useQuery<UserStats>({
     queryKey: ['user-stats', user?.id],
-    queryFn: () => userService.getMe(),
+    queryFn: () => leaderboardService.getUserStats(user!.id),
     enabled: !!user?.id,
   });
 
+  const { data: txData } = useQuery({
+    queryKey: ['transactions'],
+    queryFn: () => cardService.getTransactions(1, 5),
+  });
+
+  const recentTransactions: Transaction[] = txData?.transactions ?? [];
+
   function handleLogout() {
-    Alert.alert('Déconnexion', 'Êtes-vous sûr de vouloir vous déconnecter ?', [
+    Alert.alert('Déconnexion', 'Êtes-vous sûr ?', [
       { text: 'Annuler', style: 'cancel' },
       { text: 'Déconnecter', style: 'destructive', onPress: logout },
     ]);
   }
 
+  const initials = `${user?.firstName?.[0] ?? ''}${user?.lastName?.[0] ?? ''}`.toUpperCase() || '?';
+
   return (
-    <SafeAreaView className="flex-1 bg-bg-primary">
-      <ScrollView contentContainerClassName="px-4 pb-8">
-        <View className="pt-4 pb-2">
-          <Text className="text-2xl font-bold text-neon-cyan">Profil 👤</Text>
-        </View>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#040D21' }}>
+      <StarBackground />
+      <ScrollView contentContainerStyle={{ paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
 
-        {/* Avatar & Info */}
-        <View className="bg-bg-secondary rounded-3xl p-6 mt-4 items-center shadow-sm border-2 border-neon-cyan/20">
-          <View className="w-20 h-20 rounded-full bg-neon-cyan/20 items-center justify-center mb-3 border-2 border-neon-cyan">
-            <Text className="text-4xl">
-              {user?.firstName?.[0]?.toUpperCase() ?? '?'}
-            </Text>
-          </View>
-          <Text className="text-xl font-bold text-text-primary">
-            {user?.firstName} {user?.lastName}
-          </Text>
-          <Text className="text-text-secondary text-sm">{user?.email}</Text>
-          {!user?.emailVerified && (
-            <View className="mt-2 bg-neon-yellow/20 px-3 py-1 rounded-full border border-neon-yellow/50">
-              <Text className="text-neon-yellow text-xs">Email non vérifié</Text>
+        {/* Hero */}
+        <View style={{ paddingHorizontal: 24, paddingTop: 32, paddingBottom: 28 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+            {/* Avatar avec anneau neon */}
+            <View style={{ position: 'relative' }}>
+              <View style={{
+                width: 68, height: 68, borderRadius: 34,
+                backgroundColor: 'rgba(0,211,255,0.08)',
+                borderWidth: 2,
+                borderColor: 'rgba(0,211,255,0.5)',
+                alignItems: 'center', justifyContent: 'center',
+                shadowColor: '#00D3FF',
+                shadowOffset: { width: 0, height: 0 },
+                shadowOpacity: 0.4,
+                shadowRadius: 12,
+              }}>
+                <Text style={{ color: '#00D3FF', fontSize: 24, fontWeight: '800' }}>{initials}</Text>
+              </View>
             </View>
-          )}
-        </View>
 
-        {/* Stats placeholder */}
-        <View className="bg-bg-secondary rounded-3xl p-6 mt-4 shadow-sm border-2 border-neon-pink/20">
-          <Text className="font-bold text-neon-pink text-lg mb-4">🏆 Statistiques & Rangs</Text>
-          <View className="bg-bg-primary rounded-2xl p-4 items-center">
-            <Text className="text-text-secondary text-sm text-center">
-              Vos statistiques de jeu apparaîtront ici après vos premières parties.
-            </Text>
-          </View>
-          <View className="flex-row mt-4 gap-3">
-            <View className="flex-1 bg-neon-cyan/10 border border-neon-cyan/30 rounded-2xl p-3 items-center">
-              <Text className="text-2xl font-bold text-neon-cyan">
-                {stats?.totalXp ?? 0}
+            {/* Nom & email */}
+            <View style={{ flex: 1 }}>
+              <Text style={{ color: '#FFFFFF', fontSize: 20, fontWeight: '700', letterSpacing: -0.3, ...TEXT_SHADOW.cloudGlow }}>
+                {user?.firstName} {user?.lastName}
               </Text>
-              <Text className="text-neon-cyan/70 text-xs">XP Total</Text>
-            </View>
-            <View className="flex-1 bg-neon-pink/10 border border-neon-pink/30 rounded-2xl p-3 items-center">
-              <Text className="text-2xl font-bold text-neon-pink">
-                {stats?.gameSessions?.length ?? 0}
+              <Text style={{ color: 'rgba(255,255,255,0.35)', fontSize: 13, marginTop: 2 }}>
+                {user?.email}
               </Text>
-              <Text className="text-neon-pink/70 text-xs">Parties</Text>
-            </View>
-            <View className="flex-1 bg-neon-yellow/10 border border-neon-yellow/30 rounded-2xl p-3 items-center">
-              <Text className="text-2xl font-bold text-neon-yellow">
-                {stats?.userBadges?.length ?? 0}
-              </Text>
-              <Text className="text-neon-yellow/70 text-xs">Badges</Text>
-            </View>
-          </View>
-        </View>
-
-        {/* Badges placeholder */}
-        <View className="bg-bg-secondary rounded-3xl p-6 mt-4 shadow-sm border-2 border-neon-cyan/20">
-          <Text className="font-bold text-neon-pink text-lg mb-3">🎖 Badges</Text>
-          {stats?.userBadges && stats.userBadges.length > 0 ? (
-            <View className="flex-row flex-wrap gap-2">
-              {stats.userBadges.map((ub: any) => (
-                <View key={ub.id} className="bg-neon-yellow/10 border border-neon-yellow/30 rounded-xl p-3 items-center w-20">
-                  <Text className="text-3xl mb-1">{ub.badge.icon}</Text>
-                  <Text className="text-neon-yellow text-xs text-center">{ub.badge.name}</Text>
+              {!user?.emailVerified && (
+                <View style={{
+                  marginTop: 6, alignSelf: 'flex-start',
+                  paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6,
+                  backgroundColor: 'rgba(255,199,0,0.08)',
+                  borderWidth: 1, borderColor: 'rgba(255,199,0,0.2)',
+                }}>
+                  <Text style={{ color: '#FFC700', fontSize: 10, fontWeight: '600', letterSpacing: 0.5 }}>
+                    EMAIL NON VÉRIFIÉ
+                  </Text>
                 </View>
-              ))}
+              )}
             </View>
+          </View>
+        </View>
+
+        {/* Stats */}
+        <View style={{ paddingHorizontal: 24, marginBottom: 24 }}>
+          <Text style={{ color: 'rgba(255,255,255,0.2)', fontSize: 10, letterSpacing: 2.5, fontWeight: '700', textTransform: 'uppercase', marginBottom: 12 }}>
+            Statistiques
+          </Text>
+          <View style={{ flexDirection: 'row', gap: 10 }}>
+            {[
+              { value: stats?.totalXp ?? 0, label: 'XP', color: '#00D3FF' },
+              { value: stats?.gameSessions?.length ?? 0, label: 'Parties', color: '#FE53BB' },
+              { value: stats?.userBadges?.length ?? 0, label: 'Badges', color: '#FFC700' },
+            ].map((stat) => (
+              <View key={stat.label} style={{
+                flex: 1, padding: 16, borderRadius: 16,
+                backgroundColor: '#071333',
+                borderWidth: 1, borderColor: 'rgba(255,255,255,0.05)',
+                alignItems: 'center',
+              }}>
+                <Text style={{ color: stat.color, fontSize: 26, fontWeight: '800', lineHeight: 30 }}>
+                  {stat.value}
+                </Text>
+                <Text style={{ color: 'rgba(255,255,255,0.25)', fontSize: 11, marginTop: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
+                  {stat.label}
+                </Text>
+              </View>
+            ))}
+          </View>
+        </View>
+
+        {/* Badges */}
+        <View style={{ marginBottom: 24 }}>
+          <Text style={{ color: 'rgba(255,255,255,0.2)', fontSize: 10, letterSpacing: 2.5, fontWeight: '700', textTransform: 'uppercase', marginBottom: 12, paddingHorizontal: 24 }}>
+            Badges
+          </Text>
+          {stats?.userBadges && stats.userBadges.length > 0 ? (
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              data={stats.userBadges}
+              keyExtractor={(ub) => ub.id}
+              contentContainerStyle={{ paddingHorizontal: 24 }}
+              renderItem={({ item: ub }) => (
+                <View style={{
+                  width: 72, marginRight: 10,
+                  backgroundColor: '#071333',
+                  borderWidth: 1, borderColor: 'rgba(255,199,0,0.12)',
+                  borderRadius: 16, padding: 12, alignItems: 'center',
+                }}>
+                  <Text style={{ fontSize: 26, marginBottom: 6 }}>{ub.badge.icon}</Text>
+                  <Text style={{ color: 'rgba(255,199,0,0.7)', fontSize: 10, textAlign: 'center', fontWeight: '600' }} numberOfLines={2}>
+                    {ub.badge.name}
+                  </Text>
+                </View>
+              )}
+            />
           ) : (
-            <View className="bg-bg-primary rounded-2xl p-4 items-center">
-              <Text className="text-text-secondary text-sm text-center">
-                Gagnez des badges en jouant et en progressant dans le réseau.
-              </Text>
-            </View>
+            <TouchableOpacity
+              onPress={() => router.push(ROUTES.RECHARGE)}
+              style={{
+                marginHorizontal: 24,
+                backgroundColor: '#071333',
+                borderWidth: 1, borderColor: 'rgba(255,255,255,0.05)',
+                borderRadius: 16, padding: 20,
+                flexDirection: 'row', alignItems: 'center', gap: 14,
+              }}
+            >
+              <Text style={{ fontSize: 28 }}>🎖</Text>
+              <View style={{ flex: 1 }}>
+                <Text style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14, lineHeight: 20 }}>
+                  Jouez pour débloquer vos premiers badges
+                </Text>
+              </View>
+              <Ionicons name="chevron-forward" size={16} color="rgba(255,255,255,0.15)" />
+            </TouchableOpacity>
           )}
         </View>
 
-        {/* Actions */}
-        <View className="mt-6 gap-3">
-          <TouchableOpacity className="bg-bg-secondary rounded-2xl p-4 flex-row items-center border-2 border-neon-cyan/20 shadow-sm">
-            <Text className="text-base mr-3">✏️</Text>
-            <Text className="text-text-primary font-medium">Modifier mon profil</Text>
-            <Text className="ml-auto text-neon-cyan">›</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            className="bg-neon-pink/10 rounded-2xl p-4 flex-row items-center border-2 border-neon-pink"
-            onPress={handleLogout}
-          >
-            <Text className="text-base mr-3">🚪</Text>
-            <Text className="text-neon-pink font-medium">Se déconnecter</Text>
-          </TouchableOpacity>
+        {/* Menu */}
+        <View style={{ marginHorizontal: 24, marginBottom: 16 }}>
+          <Text style={{ color: 'rgba(255,255,255,0.2)', fontSize: 10, letterSpacing: 2.5, fontWeight: '700', textTransform: 'uppercase', marginBottom: 12 }}>
+            Compte
+          </Text>
+          <View style={{
+            backgroundColor: '#071333',
+            borderRadius: 16,
+            borderWidth: 1, borderColor: 'rgba(255,255,255,0.05)',
+            overflow: 'hidden',
+          }}>
+            {MENU_ITEMS.map((item, index) => (
+              <TouchableOpacity
+                key={item.label}
+                onPress={() => router.push(item.route as any)}
+                style={{
+                  flexDirection: 'row', alignItems: 'center',
+                  paddingHorizontal: 18, paddingVertical: 15,
+                  borderBottomWidth: index < MENU_ITEMS.length - 1 ? 1 : 0,
+                  borderBottomColor: 'rgba(255,255,255,0.04)',
+                }}
+              >
+                <View style={{
+                  width: 32, height: 32, borderRadius: 10,
+                  backgroundColor: 'rgba(255,255,255,0.04)',
+                  alignItems: 'center', justifyContent: 'center', marginRight: 12,
+                }}>
+                  <Ionicons name={item.icon} size={16} color="rgba(255,255,255,0.4)" />
+                </View>
+                <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 15, flex: 1 }}>{item.label}</Text>
+                <Ionicons name="chevron-forward" size={14} color="rgba(255,255,255,0.15)" />
+              </TouchableOpacity>
+            ))}
+          </View>
         </View>
+
+        {/* Historique des transactions */}
+        {recentTransactions.length > 0 && (
+          <View style={{ marginHorizontal: 24, marginBottom: 16 }}>
+            <Text style={{ color: 'rgba(255,255,255,0.2)', fontSize: 10, letterSpacing: 2.5, fontWeight: '700', textTransform: 'uppercase', marginBottom: 12 }}>
+              Dernières transactions
+            </Text>
+            <View style={{
+              backgroundColor: '#071333',
+              borderRadius: 16,
+              borderWidth: 1, borderColor: 'rgba(255,255,255,0.05)',
+              overflow: 'hidden',
+            }}>
+              {recentTransactions.map((tx, index) => {
+                const cfg = TX_CONFIG[tx.type] ?? TX_CONFIG.DEBIT;
+                return (
+                  <View
+                    key={tx.id}
+                    style={{
+                      flexDirection: 'row', alignItems: 'center',
+                      paddingHorizontal: 16, paddingVertical: 13,
+                      borderBottomWidth: index < recentTransactions.length - 1 ? 1 : 0,
+                      borderBottomColor: 'rgba(255,255,255,0.04)',
+                    }}
+                  >
+                    <View style={{
+                      width: 30, height: 30, borderRadius: 10,
+                      backgroundColor: `${cfg.color}14`,
+                      alignItems: 'center', justifyContent: 'center', marginRight: 12,
+                    }}>
+                      <Ionicons name={cfg.icon} size={15} color={cfg.color} />
+                    </View>
+                    <View style={{ flex: 1 }}>
+                      <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, fontWeight: '500' }} numberOfLines={1}>
+                        {tx.description ?? tx.type}
+                      </Text>
+                      <Text style={{ color: 'rgba(255,255,255,0.25)', fontSize: 11, marginTop: 2 }}>
+                        {new Date(tx.createdAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })}
+                      </Text>
+                    </View>
+                    <Text style={{ color: cfg.color, fontWeight: '700', fontSize: 14 }}>
+                      {cfg.sign}{Math.abs(tx.amount)}
+                    </Text>
+                  </View>
+                );
+              })}
+            </View>
+          </View>
+        )}
+
+        {/* Déconnexion */}
+        <TouchableOpacity
+          style={{
+            marginHorizontal: 24,
+            backgroundColor: 'rgba(254,83,187,0.06)',
+            borderWidth: 1, borderColor: 'rgba(254,83,187,0.15)',
+            borderRadius: 16, paddingVertical: 15, paddingHorizontal: 18,
+            flexDirection: 'row', alignItems: 'center', gap: 12,
+          }}
+        >
+          <View style={{
+            width: 32, height: 32, borderRadius: 10,
+            backgroundColor: 'rgba(254,83,187,0.08)',
+            alignItems: 'center', justifyContent: 'center',
+          }}>
+            <Ionicons name="log-out-outline" size={16} color="#FE53BB" />
+          </View>
+          <Text style={{ color: '#FE53BB', fontSize: 15, fontWeight: '500' }}>Se déconnecter</Text>
+        </TouchableOpacity>
+
       </ScrollView>
     </SafeAreaView>
   );

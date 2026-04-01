@@ -1,6 +1,7 @@
 import { Response } from 'express';
 import { AuthRequest } from '../middlewares/auth.middleware';
 import * as cardService from '../services/card.service';
+import * as walletService from '../services/wallet.service';
 import { ERROR_CODES } from '../constants/error-codes';
 
 export async function getMyCard(req: AuthRequest, res: Response) {
@@ -37,6 +38,23 @@ export async function getTransactions(req: AuthRequest, res: Response) {
     const result = await cardService.getTransactions(req.userId!, page, limit);
     res.json(result);
   } catch {
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+}
+
+export async function getWalletPass(req: AuthRequest, res: Response) {
+  try {
+    const buffer = await walletService.generateWalletPass(req.userId!);
+    res.setHeader('Content-Type', 'application/vnd.apple.pkpass');
+    res.setHeader('Content-Disposition', 'attachment; filename="tdln.pkpass"');
+    res.send(buffer);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      if (err.message === ERROR_CODES.CARD_NOT_FOUND)
+        return res.status(404).json({ message: 'Carte non trouvée.' });
+      if (err.message === ERROR_CODES.WALLET_CERTS_MISSING)
+        return res.status(503).json({ message: 'Apple Wallet non configuré sur ce serveur.' });
+    }
     res.status(500).json({ message: 'Erreur serveur' });
   }
 }

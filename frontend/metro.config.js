@@ -8,6 +8,7 @@ const config = getDefaultConfig(__dirname);
 // On les résout vers des stubs appropriés pour éviter les crashes au bundle.
 const WEB_STUBS = {
   '@stripe/stripe-react-native': path.resolve(__dirname, 'stubs/stripe-react-native.web.js'),
+  'react-native-maps': path.resolve(__dirname, 'stubs/react-native-maps.web.js'),
 };
 
 // Packages dont les modules internes cassent le bundle web.

@@ -1,5 +1,6 @@
 import { prisma } from '../utils/prisma';
 import { BUSINESS_CONSTANTS } from '../constants/business';
+import { BADGE_IDS } from '../constants/badge-ids';
 
 export async function getLeaderboard(gameId: string, venueId?: string, page = 1, limit = 20) {
   const skip = (page - 1) * limit;
@@ -74,5 +75,44 @@ export async function recordGameSession(
     });
   }
 
+  // ─── Badge granting (best-effort, never breaks the session) ───────────────
+  try {
+    await grantEarnedBadges(userId, gameId, score);
+  } catch {
+    // badge errors must not propagate to the caller
+  }
+
   return session;
+}
+
+async function grantEarnedBadges(userId: string, gameId: string, score: number) {
+  const [totalSessions, game, vrSessions] = await Promise.all([
+    prisma.gameSession.count({ where: { userId } }),
+    prisma.game.findUnique({ where: { id: gameId }, select: { category: true } }),
+    prisma.gameSession.count({ where: { userId, game: { category: 'VR' } } }),
+  ]);
+
+  const badgesToGrant: string[] = [];
+
+  if (totalSessions === 1) {
+    badgesToGrant.push(BADGE_IDS.FIRST_PLAY);
+  }
+  if (score >= BUSINESS_CONSTANTS.BADGE_HIGH_SCORE_THRESHOLD) {
+    badgesToGrant.push(BADGE_IDS.HIGH_SCORE);
+  }
+  if (game?.category === 'VR' && vrSessions >= BUSINESS_CONSTANTS.BADGE_VR_MASTER_SESSIONS) {
+    badgesToGrant.push(BADGE_IDS.VR_MASTER);
+  }
+
+  if (badgesToGrant.length === 0) return;
+
+  await Promise.all(
+    badgesToGrant.map((badgeId) =>
+      prisma.userBadge.upsert({
+        where: { userId_badgeId: { userId, badgeId } },
+        update: {},
+        create: { userId, badgeId },
+      }),
+    ),
+  );
 }

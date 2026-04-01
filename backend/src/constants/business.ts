@@ -14,4 +14,10 @@ export const BUSINESS_CONSTANTS = {
 
   /** Diviseur pour calculer le bonus XP basé sur le score (score / XP_SCORE_DIVISOR) */
   XP_SCORE_DIVISOR: 100,
+
+  /** Score minimum pour déclencher le badge Maître du Score */
+  BADGE_HIGH_SCORE_THRESHOLD: 1000,
+
+  /** Nombre de sessions VR pour déclencher le badge Expert VR */
+  BADGE_VR_MASTER_SESSIONS: 10,
 } as const;

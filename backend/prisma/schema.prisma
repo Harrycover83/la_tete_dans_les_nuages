@@ -32,6 +32,8 @@ model User {
   gameSessions      GameSession[]
   userBadges        UserBadge[]
   leaderboardEntries LeaderboardEntry[]
+  bookings          Booking[]
+  sessionBookings   SessionBooking[]
 
   @@map("users")
 }
@@ -118,12 +120,17 @@ model Venue {
   name        String
   address     String?
   city        String?
+  phone       String?
   imageUrl    String?
+  latitude    Float?
+  longitude   Float?
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
 
   games    GameVenue[]
   articles ArticleVenue[]
+  events   Event[]
+  sessionBookings SessionBooking[]
 
   @@map("venues")
 }
@@ -250,4 +257,75 @@ model UserBadge {
 
   @@unique([userId, badgeId])
   @@map("user_badges")
+}
+
+// ─── Events & Bookings ───────────────────────────────────────────────────────
+
+model Event {
+  id           String    @id @default(uuid())
+  title        String
+  description  String?
+  imageUrl     String?
+  startDate    DateTime
+  endDate      DateTime?
+  venueId      String
+  maxCapacity  Int       @default(50)
+  priceUnits   Int       @default(0) // cost in game units (0 = free)
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  venue    Venue     @relation(fields: [venueId], references: [id], onDelete: Cascade)
+  bookings Booking[]
+
+  @@map("events")
+}
+
+model Booking {
+  id        String        @id @default(uuid())
+  userId    String
+  eventId   String
+  status    BookingStatus @default(CONFIRMED)
+  createdAt DateTime      @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, eventId])
+  @@map("bookings")
+}
+
+enum BookingStatus {
+  CONFIRMED
+  CANCELLED
+}
+
+// ─── Session Bookings (réservation de créneaux/formules) ─────────────────────
+
+model SessionBooking {
+  id            String               @id @default(uuid())
+  userId        String
+  venueId       String
+  eventTypeId   String               // 'birthday_kids' | 'vr_session' | etc.
+  participants  Int
+  bookingDate   DateTime
+  timeSlot      String               // '14:30'
+  formulaId     String?              // 'classique' | 'deluxe' | 'premium'
+  cakeId        String?              // 'moelleux_chocolat' | 'tarte_pommes'
+  totalPrice    Float
+  notes         String?
+  status        SessionBookingStatus @default(PENDING)
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  venue Venue @relation(fields: [venueId], references: [id], onDelete: Cascade)
+
+  @@map("session_bookings")
+}
+
+enum SessionBookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
 }

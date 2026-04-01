@@ -14,9 +14,14 @@ export const ROUTES = {
   HOME: '/(tabs)/home',
   CARD: '/(tabs)/card',
   RECHARGE: '/(tabs)/recharge',
-  HISTORY: '/(tabs)/history',
+  VENUES: '/(tabs)/venues',
   PROFILE: '/(tabs)/profile',
 
   // Article
   ARTICLE: (id: string) => `/article/${id}` as const,
+
+  // Profile sub-screens
+  EDIT_PROFILE: '/profile/edit',
+  NOTIFICATIONS: '/profile/notifications',
+  SUPPORT: '/support',
 } as const;

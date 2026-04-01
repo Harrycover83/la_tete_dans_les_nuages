@@ -24,4 +24,6 @@ router.post(
 
 router.get('/transactions', authenticate, cardController.getTransactions);
 
+router.get('/wallet-pass', authenticate, cardController.getWalletPass);
+
 export default router;

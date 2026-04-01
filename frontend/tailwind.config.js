@@ -10,9 +10,9 @@ module.exports = {
         // Univers neon/arcade sur fond violet nuit
 
         // Fonds
-        'bg-primary': '#1B1C72',
-        'bg-secondary': '#0B022E',
-        'bg-card': '#12063E',
+        'bg-primary': '#040D21',
+        'bg-secondary': '#071333',
+        'bg-card': '#0C1A45',
 
         // Accents neon
         'neon-cyan': '#00D3FF',

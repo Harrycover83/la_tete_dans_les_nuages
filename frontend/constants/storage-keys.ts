@@ -14,6 +14,8 @@ export const STORAGE_KEYS = {
   LANGUAGE: 'ltdln_language',
   /** Thème préféré (dark uniquement pour l'instant) */
   THEME: 'ltdln_theme',
+  /** Préférences de notifications */
+  NOTIF_PREFS: 'ltdln_notif_prefs',
 } as const;
 
 export type StorageKey = (typeof STORAGE_KEYS)[keyof typeof STORAGE_KEYS];

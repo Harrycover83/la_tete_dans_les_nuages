@@ -11,6 +11,8 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { Link, router } from 'expo-router';
+import { StarBackground } from '../../components/StarBackground';
+import { TEXT_SHADOW } from '../../constants/typography';
 import { useAuthStore } from '../../stores/auth.store';
 
 export default function LoginScreen() {
@@ -40,8 +42,9 @@ export default function LoginScreen() {
       className="flex-1 bg-bg-primary"
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
+      <StarBackground />
       <ScrollView contentContainerClassName="flex-grow justify-center px-6 py-12">
-        <Text className="text-3xl font-bold text-neon-cyan text-center mb-2">
+        <Text className="text-3xl font-bold text-white text-center mb-2" style={TEXT_SHADOW.cloudGlowStrong}>
           Tête dans les Nuages
         </Text>
         <Text className="text-base text-text-secondary text-center mb-10">

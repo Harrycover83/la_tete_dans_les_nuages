@@ -23,6 +23,13 @@ const envSchema = z.object({
   FRONTEND_URL: z.string().default('http://localhost:8081'),
   UPLOAD_DIR: z.string().default('./uploads'),
   MAX_FILE_SIZE_MB: z.string().default('5').transform(Number),
+  // Apple Wallet
+  APPLE_WALLET_TEAM_ID: z.string().optional(),
+  APPLE_WALLET_PASS_TYPE_ID: z.string().optional(),
+  APPLE_WALLET_CERT_PEM: z.string().optional(),
+  APPLE_WALLET_KEY_PEM: z.string().optional(),
+  APPLE_WALLET_WWDR_PEM: z.string().optional(),
+  APPLE_WALLET_KEY_PASSPHRASE: z.string().optional(),
 });
 
 const parsed = envSchema.safeParse(process.env);

@@ -15,6 +15,9 @@ import gazetteRoutes from './routes/gazette.routes';
 import leaderboardRoutes from './routes/leaderboard.routes';
 import userRoutes from './routes/user.routes';
 import adminRoutes from './routes/admin.routes';
+import venueRoutes from './routes/venue.routes';
+import eventRoutes from './routes/event.routes';
+import sessionBookingRoutes from './routes/session-booking.routes';
 
 const app = express();
 
@@ -60,6 +63,9 @@ app.use('/api/gazette', apiLimiter, gazetteRoutes);
 app.use('/api/leaderboard', apiLimiter, leaderboardRoutes);
 app.use('/api/user', apiLimiter, userRoutes);
 app.use('/api/admin', adminLimiter, adminRoutes);
+app.use('/api/venues', apiLimiter, venueRoutes);
+app.use('/api/events', apiLimiter, eventRoutes);
+app.use('/api/session-bookings', apiLimiter, sessionBookingRoutes);
 
 // ─── 404 Handler ─────────────────────────────────────────────────────────────
 app.use((_req, res) => {
